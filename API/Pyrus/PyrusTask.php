@@ -12,35 +12,48 @@ class PyrusTask
   //Обработанные задачи
   private array $tasks = [];
 
+  private array $tasksId = [];
+
   public function __construct()
   {
     $this->api = new PyrusAPI('v.kobelev@danaflex.ru', 'xJd9YhVAYDtQ-Fmj-sRwRwWCmQzIHfJirAGvBcvBhRGT6W8RqGj~HPiAOWNB8O4EX2N12OLSFWyXfO1yP0C1Lk0XM~lYfM4Z');
     $this->getRawInboxTasks();
-    $this->getTasksId();
-    $this->formattedRawTasks();
   }
 
-  public function getRawInboxTasks(): void
+  public function getRawInboxTasks(): static
   {
     $this->rawTasks = $this->api->getInboxTasks();
+    //$this->getTasksId();
+
+    return $this;
   }
 
-  public function showTasks(): void
+  public function getRawInboxTask($id): static
+  {
+    $this->rawTasks = $this->api->getTaskById($id);
+
+    return $this;
+  }
+
+  public function show(): void
   {
     print_r($this->tasks);
   }
 
-  public function formattedRawTasks(): void
+  public function format(): static
   {
+    $this->getTasksId();
     foreach ($this->tasks as $id => $value)
     {
-      $task = $this->formattedRawTask($id);
+      $task = $this->clearTaskFields($id);
       $this->tasks[$id] = $task;
     }
+
+    return $this;
   }
 
   //Получить поля задачи
-  public function formattedRawTask(int $id): array
+  private function clearTaskFields(int $id): array
   {
     $task = [];
     $rawTask = $this->api->getTaskById($id);
@@ -57,7 +70,7 @@ class PyrusTask
   }
 
   //Получить все ID входящих задач и записать в массив задач
-  public function getTasksId(): void
+  private function getTasksId(): void
   {
     foreach ($this->rawTasks['tasks'] as $task)
     {

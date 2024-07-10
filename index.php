@@ -3,23 +3,19 @@
 require 'vendor/autoload.php';
 require_once 'template.php';
 
-use API\Pyrus\PyrusAPI;
 use API\Pyrus\PyrusTask;
 
 $task = new PyrusTask();
 
 if(isset($_POST['inboxTasks']))
 {
-  $task->showTasks();
+  $task->getRawInboxTasks()->format()->show();
 }
 
 if(isset($_POST['getTaskById']))
 {
-  //$api->getTaskById(225509752);
+  $id = $_POST['taskId'] ?? NULL;
+  $task->getT($id);
 }
 
-if(isset($_POST['getLists']))
-{
-  //$api->getUserLists();
-}
 

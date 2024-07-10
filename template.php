@@ -6,9 +6,9 @@
 
   <body>
     <form action="index.php" method="post">
-      <input type="submit" name="inboxTasks" value="Inbox">
-      <input type="submit" name="getTaskById" value="TaskById (Отключена)">
-      <input type="submit" name="getLists" value="Lists (Отключена)">
+      <input type="submit" name="inboxTasks" value="Get Inbox Tasks">
+      <input type="text" name="taskId">
+      <input type="submit" name="getTaskById" value="TaskById">
     </form>
 
     <form action="template.php" method="post">
