@@ -1,0 +1,17 @@
+{
+  "name": "llibilliku/test",
+  "authors": [
+    {
+      "name": "Vladimir"
+    }
+  ],
+  "require": {
+    "lcobucci/jwt": "^4.0",
+    "ext-curl": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "API\\": "API/"
+    }
+  }
+}
