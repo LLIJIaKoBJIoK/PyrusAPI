@@ -15,10 +15,9 @@ if(isset($_POST['getTasks']))
 
 if(isset($_POST['getTask']))
 {
-  $id = $_POST['taskId'] ?? NULL;
-
-  $tasks = $task->getInboxTask($id);
-  print_r($tasks);
+  $id = $_POST['taskId'];
+  $task = $task->getInboxTask((int)$id);
+  print_r($task);
 }
 
 
