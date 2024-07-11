@@ -12,35 +12,27 @@ class PyrusTask
   //Обработанные задачи
   private array $tasks = [];
 
-  private array $tasksId = [];
-
   public function __construct()
   {
     $this->api = new PyrusAPI('v.kobelev@danaflex.ru', 'xJd9YhVAYDtQ-Fmj-sRwRwWCmQzIHfJirAGvBcvBhRGT6W8RqGj~HPiAOWNB8O4EX2N12OLSFWyXfO1yP0C1Lk0XM~lYfM4Z');
-    $this->getRawInboxTasks();
   }
 
-  public function getRawInboxTasks(): static
+  public function getInboxTasks(): array
   {
     $this->rawTasks = $this->api->getInboxTasks();
-    //$this->getTasksId();
-
-    return $this;
+    $this->format();
+    return $this->tasks;
   }
 
-  public function getRawInboxTask($id): static
+  //Добавить проверку $id
+  public function getInboxTask(int $id): array
   {
     $this->rawTasks = $this->api->getTaskById($id);
-
-    return $this;
+    $this->format();
+    return $this->tasks;
   }
 
-  public function show(): void
-  {
-    print_r($this->tasks);
-  }
-
-  public function format(): static
+  public function format(): void
   {
     $this->getTasksId();
     foreach ($this->tasks as $id => $value)
@@ -48,17 +40,13 @@ class PyrusTask
       $task = $this->clearTaskFields($id);
       $this->tasks[$id] = $task;
     }
-
-    return $this;
   }
 
-  //Получить поля задачи
   private function clearTaskFields(int $id): array
   {
     $task = [];
     $rawTask = $this->api->getTaskById($id);
 
-    //$task['id'] = $rawTask['task']['id'] ?? '';
     $task['created_date'] = $rawTask['task']['create_date'] ?? '';
     $task['place'] = $rawTask['task']['fields'][1]['value']['values'][0] ?? '';
     $task['ticket_source'] = $rawTask['task']['fields'][2]['value']['values'][0] ?? '';
@@ -69,13 +57,21 @@ class PyrusTask
     return $task;
   }
 
-  //Получить все ID входящих задач и записать в массив задач
+  //Получить все ID входящих задач / задачи и записать в массив задач. Нужна оптимизация этого блока
   private function getTasksId(): void
   {
-    foreach ($this->rawTasks['tasks'] as $task)
+    if(isset($this->rawTasks['tasks']))
     {
-      $key = $task['id'];
-      $this->tasks[$key] = '';
+      foreach ($this->rawTasks['tasks'] as $task)
+      {
+        $id = $task['id'];
+        $this->tasks[$id] = '';
+      }
+    } else {
+      $id = $this->rawTasks['task']['id'];
+      $this->tasks[$id] = '';
     }
+
+
   }
 }

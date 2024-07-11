@@ -7,15 +7,18 @@ use API\Pyrus\PyrusTask;
 
 $task = new PyrusTask();
 
-if(isset($_POST['inboxTasks']))
+if(isset($_POST['getTasks']))
 {
-  $task->getRawInboxTasks()->format()->show();
+  $tasks = $task->getInboxTasks();
+  print_r($tasks);
 }
 
-if(isset($_POST['getTaskById']))
+if(isset($_POST['getTask']))
 {
   $id = $_POST['taskId'] ?? NULL;
-  $task->getT($id);
+
+  $tasks = $task->getInboxTask($id);
+  print_r($tasks);
 }
 
 

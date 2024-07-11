@@ -6,8 +6,8 @@
     }
   ],
   "require": {
-    "lcobucci/jwt": "^4.0",
-    "ext-curl": "*"
+    "ext-curl": "*",
+    "dotenv-org/phpdotenv-vault": "^0.2.4"
   },
   "autoload": {
     "psr-4": {
