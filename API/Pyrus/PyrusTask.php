@@ -4,6 +4,8 @@ namespace API\Pyrus;
 
 class PyrusTask
 {
+  private const FIELD_NOT_FOUND = 'FIELD NOT FOUND';
+
   private PyrusAPI $api;
 
   //Полученые задачи через API в необработанном виде
@@ -12,9 +14,10 @@ class PyrusTask
   //Обработанные задачи
   private array $tasks = [];
 
-  public function __construct()
+  public function __construct($userName, $securityKey)
   {
-    $this->api = new PyrusAPI('v.kobelev@danaflex.ru', 'xJd9YhVAYDtQ-Fmj-sRwRwWCmQzIHfJirAGvBcvBhRGT6W8RqGj~HPiAOWNB8O4EX2N12OLSFWyXfO1yP0C1Lk0XM~lYfM4Z');
+    $this->api = new PyrusAPI();
+    $this->api->setCredentials($userName, $securityKey)->getToken();
   }
 
   public function getInboxTasks(): array
@@ -47,12 +50,18 @@ class PyrusTask
     $task = [];
     $rawTask = $this->api->getTaskById($id);
 
-    $task['created_date'] = $rawTask['task']['create_date'] ?? '';
-    $task['place'] = $rawTask['task']['fields'][1]['value']['values'][0] ?? '';
-    $task['ticket_source'] = $rawTask['task']['fields'][2]['value']['values'][0] ?? '';
-    $task['service_catalog'] = $rawTask['task']['fields'][13]['value']['values'][0] ?? '';
-    $task['Responsible'] = $rawTask['task']['fields'][17]['value'] ?? '';
-    $task['Attachments'] = $rawTask['task']['fields'][10]['value'][0]['url'] ?? '';
+    $task['created_date'] = $rawTask['task']['create_date'] ?? self::FIELD_NOT_FOUND;
+    $task['place'] = $rawTask['task']['fields'][1]['value']['values'][0] ?? self::FIELD_NOT_FOUND;
+    $task['ticket_source'] = $rawTask['task']['fields'][2]['value']['values'][0] ?? self::FIELD_NOT_FOUND;
+    $task['phone'] = $rawTask['task']['fields'][5]['value'] ?? self::FIELD_NOT_FOUND;
+    $task['service_catalog'] = $rawTask['task']['fields'][13]['value']['values'][0] ?? self::FIELD_NOT_FOUND;
+    $task['responsible'] = $rawTask['task']['fields'][14]['value']['email'] ?? self::FIELD_NOT_FOUND;
+    $task['solution'] = $rawTask['task']['fields'][17]['value'] ?? self::FIELD_NOT_FOUND;
+    $task['description'] = $rawTask['task']['fields'][19]['value'] ?? self::FIELD_NOT_FOUND;
+    $task['attachments'] = $rawTask['task']['fields'][10]['value'][0]['url'] ?? self::FIELD_NOT_FOUND;
+    $task['topic'] = $rawTask['task']['fields'][3]['value'] ?? self::FIELD_NOT_FOUND;
+    $task['sender_name'] = $rawTask['task']['fields'][7]['value'] ?? self::FIELD_NOT_FOUND;
+    $task['open_closed'] = $rawTask['task']['fields'][18]['value'] ?? self::FIELD_NOT_FOUND;
 
     return $task;
   }

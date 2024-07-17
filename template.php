@@ -12,10 +12,14 @@
         <form action="index.php" method="post">
           <div class="mb-3 ">
             <label for="taskId" class="form-label">Task ID</label>
-            <input type="text" name="taskId" class="form-control" id="taskId">
+            <input type="text" name="taskId" class="form-control" id="taskId" value="225509752">
           </div>
+          <div class="mb-3 ">
             <button type="submit" name="getTasks" class="btn btn-primary">Get Tasks</button>
             <button type="submit" name="getTask" class="btn btn-secondary">Get Task</button>
+            <button type="submit" name="getRawTask" class="btn btn-warning">Get Raw Task</button>
+          </div>
+            <button type="submit" name="refreshForm" class="btn btn-danger">Refresh Form</button>
         </form>
       </div>
     </div>

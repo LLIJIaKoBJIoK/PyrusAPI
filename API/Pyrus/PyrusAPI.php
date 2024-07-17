@@ -10,10 +10,9 @@
     Каталог Услуг / Service catalog
     Ответственный / Responsible
     Решение / Solution
-    ${Description}
+    Description
     ${Attachments}
-
-    ${Subject}
+    ${topic}
     ${Sender Name}
     ${Rating}
  */
@@ -39,12 +38,16 @@ class PyrusAPI
 
   private string $token = '';
 
-  public function __construct($login, $security_key)
+  public function __construct()
+  {
+  }
+
+  public function setCredentials($login, $securityKey): static
   {
     $this->auth['login'] = $login;
-    $this->auth['security_key'] = $security_key;
+    $this->auth['security_key'] = $securityKey;
 
-    $this->setToken();
+    return $this;
   }
 
   private function setToken(): void
@@ -58,12 +61,14 @@ class PyrusAPI
     curl_setopt($curl, CURLOPT_HEADER, false);
     $html = curl_exec($curl);
     curl_close($curl);
-
     $this->token = json_decode($html)->access_token;
   }
 
   public function getToken(): string
   {
+    if ($this->token == '')
+      $this->setToken();
+
     return $this->token;
   }
 
